@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -20,13 +21,17 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
+import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
+
+
 /*
  * File Index 
  */
 public class IndexFiles {
 	public static void main(String[] args) {
-		String docsPath = "/workspace/"; //1. 색인 대상 문서가 있는 경로 
-		String indexPath = "/study/lucene/lucene_index/"; //2. 색인 파일이 만들어질 경로
+		String docsPath = "/workspace/"; //1. 색인 대상 문서가 있는 경로
+		//String docsPath = "/study/lucene/index_source/";
+		String indexPath = "/study/lucene/indexFiles/"; //2. 색인 파일이 만들어질 경로
 		
 		final File docDir = new File(docsPath);
 	    if (!docDir.exists() || !docDir.canRead()) {
@@ -38,8 +43,8 @@ public class IndexFiles {
 	    
 	    try {
 	    	Directory dir = FSDirectory.open(new File(indexPath));
-	        //Analyzer analyzer = new KoreanAnalyzer(true); //문서 내용을 분석 할 때 사용 될 Analyzer
-	        Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
+	        Analyzer analyzer = new KoreanAnalyzer(true); //문서 내용을 분석 할 때 사용 될 Analyzer
+	        //Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
 	        IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_36, analyzer);
 
 	        boolean create = true; //4. 색인 파일을 새로 생성 할 것인지의 여부 
@@ -88,7 +93,7 @@ public class IndexFiles {
 					return;
 				}
 				
-				System.out.println(lowerStr);
+				System.out.println("index target file : " + fileName);
 				
 				FileInputStream fis;
 				try {
@@ -105,10 +110,13 @@ public class IndexFiles {
 					doc.add(pathField);
 					
 					//Path 를 제외한 파일명
-					doc.add(new Field("filename", fileName, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+					doc.add(new Field("filename", fileName.toLowerCase(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
 					
 					//파일의 마지막 수정일
-					doc.add(new Field("lastmodified ", String.valueOf(new Date(file.lastModified())), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+					Date date = new Date(file.lastModified());
+					SimpleDateFormat df = new SimpleDateFormat("yyyyMMddhhmmss");
+					String strDate = df.format(date);
+					doc.add(new Field("lastmodified ", strDate, Field.Store.YES, Field.Index.NO));
 					
 					//파일의 내용 색인
 					doc.add(new Field("contents", new BufferedReader(new InputStreamReader(fis, "UTF-8"))));
