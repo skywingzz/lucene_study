@@ -13,6 +13,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.NumericField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
@@ -116,7 +117,9 @@ public class IndexFiles {
 					Date date = new Date(file.lastModified());
 					SimpleDateFormat df = new SimpleDateFormat("yyyyMMddhhmmss");
 					String strDate = df.format(date);
-					doc.add(new Field("lastmodified ", strDate, Field.Store.YES, Field.Index.NO));
+					
+					NumericField nf = new NumericField("lastmodified", Field.Store.YES, false);
+					doc.add(nf.setLongValue(Long.parseLong(strDate)));
 					
 					//파일의 내용 색인
 					doc.add(new Field("contents", new BufferedReader(new InputStreamReader(fis, "UTF-8"))));
