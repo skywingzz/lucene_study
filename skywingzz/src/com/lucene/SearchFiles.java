@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
+import org.apache.lucene.analysis.kr.KoreanAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.QueryParser;
@@ -18,15 +19,16 @@ public class SearchFiles {
 
 	public static void main(String[] args) throws Exception {
 		String index = "/study/lucene/indexFiles/"; //1. 인덱스 파일이 있는 경로
-		String field = "filename"; //2. 키워드로 검색 할 필
-	    String queryString = "eng* index*"; //3. 루씬에서 사용되는 검색쿼리
+		String field = "contents"; //2. 키워드로 검색 할 필
+	    String queryString = "search*"; //3. 루씬에서 사용되는 검색쿼리
 	    int hitsPerPage = 10; //4. 한 페이지에 보여 줄 검색 결과 수
 	    
 	    IndexReader indexReader = IndexReader.open(FSDirectory.open(new File(index)));
 	    IndexSearcher searcher = new IndexSearcher(indexReader);
 	    
-	    Analyzer analyzer = new KeywordAnalyzer();
+	    //Analyzer analyzer = new KeywordAnalyzer();
 	    //Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_36);
+	    Analyzer analyzer = new KoreanAnalyzer(true);
 	    
 	    QueryParser parser = new QueryParser(Version.LUCENE_36, field, analyzer);
     	Query query = parser.parse(queryString);
