@@ -30,8 +30,8 @@ import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
  */
 public class IndexFiles {
 	public static void main(String[] args) {
-		String docsPath = "/workspace/"; //1. 색인 대상 문서가 있는 경로
-		//String docsPath = "/study/lucene/index_source/";
+//		String docsPath = "/workspace/"; //1. 색인 대상 문서가 있는 경로
+		String docsPath = "/study/lucene/index_source/";
 		String indexPath = "/study/lucene/indexFiles/"; //2. 색인 파일이 만들어질 경로
 		
 		final File docDir = new File(docsPath);
