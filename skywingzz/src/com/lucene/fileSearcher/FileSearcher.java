@@ -2,22 +2,15 @@ package com.lucene.fileSearcher;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.kr.KoreanAnalyzer;
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 
@@ -34,8 +27,14 @@ public class FileSearcher {
 		IndexSearcher searcher = new IndexSearcher(indexReader);
 		
 		SearchBO searchBO = new SearchBO();
-		searchBO.setTitle(title);
-		//searchBO.setKwd(keyword);
+		
+		//파일명, 내용 검색
+		searchBO.setTitle(title); //파일명 검색어
+		searchBO.setKwd(keyword); //파일 내용 검색어
+		
+		//날짜 검색
+		searchBO.setStartDate(20121126); //수정일 검색 시작일
+		searchBO.setEndDate(20121128); //수정일 검색 종료일
 		
 		FileSearcherQueryMaker qm = new FileSearcherQueryMaker(searchBO);
 		BooleanQuery bq = qm.makeQuery();
@@ -54,6 +53,7 @@ public class FileSearcher {
     		String fullPath = doc.get("path");
     		String filename = doc.get("filename");
     		String lastmodified = doc.get("lastmodified");
+    		//SimpleDateFormat df = new SimpleDateFormat();
     		
 			System.out.println((i+1) + ". 파일명 : " + filename);
 			System.out.println("풀파일명 : " + fullPath) ;

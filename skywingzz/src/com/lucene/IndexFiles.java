@@ -115,10 +115,10 @@ public class IndexFiles {
 					
 					//파일의 마지막 수정일
 					Date date = new Date(file.lastModified());
-					SimpleDateFormat df = new SimpleDateFormat("yyyyMMddhhmmss");
+					SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 					String strDate = df.format(date);
-					
-					NumericField nf = new NumericField("lastmodified", Field.Store.YES, false);
+					System.out.println("modified date : " + strDate);
+					NumericField nf = new NumericField("lastmodified", Field.Store.YES, true);
 					doc.add(nf.setLongValue(Long.parseLong(strDate)));
 					
 					//파일의 내용 색인
