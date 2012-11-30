@@ -9,6 +9,7 @@ import org.apache.lucene.analysis.kr.KoreanAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.MultiTermQuery;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
@@ -22,29 +23,29 @@ public class FileSearcherQueryMaker {
 		this.searchBO = searchBO;
 	}
 	
-	protected BooleanQuery makeQuery() throws IOException {
-		BooleanQuery bq = new BooleanQuery();
-		//PhraseQuery pq = new PhraseQuery();
+	protected Query makeQuery() throws IOException {
+		BooleanQuery resultQuery = new BooleanQuery();
+		
 		if(searchBO.getTitle() != null && !"".equals(searchBO.getTitle())) {
 //			bq.add(kwdTokenizer("filename", searchBO.getTitle()), Occur.SHOULD);
 			Query query = new TermQuery(new Term("filename", searchBO.getTitle()));
-			bq.add(query, Occur.SHOULD);
+			resultQuery.add(query, Occur.SHOULD);
 		}
 		
 		if(searchBO.getKwd() != null && !"".equals(searchBO.getKwd())) {
 			//bq.add(kwdTokenizer("contents", searchBO.getKwd()), Occur.SHOULD);
 			Query query = new TermQuery(new Term("contents", searchBO.getKwd()));
-			bq.add(query, Occur.SHOULD);
+			resultQuery.add(query, Occur.MUST_NOT);
 		}
 		
 		if(searchBO.getStartDate() > 0 && searchBO.getEndDate() > 0) {
 			NumericRangeQuery nrq = NumericRangeQuery.newLongRange("lastmodified", searchBO.getStartDate(), searchBO.getEndDate(), true, false);
-			bq.add(nrq, Occur.SHOULD);
+			resultQuery.add(nrq, Occur.SHOULD);
 		}
 		
 		
-		System.out.println("Query : " + bq);
-		return bq;
+		System.out.println("Query : " + resultQuery);
+		return resultQuery;
 	}
 	
 	private static Query kwdTokenizer(String fieldName, String kwd) throws IOException {

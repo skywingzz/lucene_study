@@ -45,7 +45,7 @@ public class IndexFiles {
 	    try {
 	    	Directory dir = FSDirectory.open(new File(indexPath));
 	        Analyzer analyzer = new KoreanAnalyzer(true); //문서 내용을 분석 할 때 사용 될 Analyzer
-	        //Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
+//	        Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
 	        IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_36, analyzer);
 
 	        boolean create = true; //4. 색인 파일을 새로 생성 할 것인지의 여부 
@@ -111,7 +111,7 @@ public class IndexFiles {
 					doc.add(pathField);
 					
 					//Path 를 제외한 파일명
-					doc.add(new Field("filename", fileName.toLowerCase(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+					doc.add(new Field("filename", fileName.toLowerCase(), Field.Store.YES, Field.Index.ANALYZED));
 					
 					//파일의 마지막 수정일
 					Date date = new Date(file.lastModified());
@@ -126,6 +126,7 @@ public class IndexFiles {
 					
 					if(writer.getConfig().getOpenMode() == OpenMode.CREATE) {
 						System.out.println("adding New file : " + file);
+						System.out.println(doc.toString());
 						writer.addDocument(doc);
 					} else {
 						System.out.println("Updating file : " + file);

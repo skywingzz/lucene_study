@@ -3,6 +3,8 @@ package com.lucene.fileSearcher;
 public class SearchBO {
 	String title = "";
 	String kwd = "";
+	String[] arrKwd;
+	
 	long startDate = 0L;
 	long endDate = 0L;
 	
@@ -30,6 +32,13 @@ public class SearchBO {
 	public void setEndDate(long endDate) {
 		this.endDate = endDate;
 	}
+	public String[] getArrKwd() {
+		return arrKwd;
+	}
+	public void setArrKwd(String[] arrKwd) {
+		this.arrKwd = arrKwd;
+	}
+	
 	
 	
 }
