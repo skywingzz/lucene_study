@@ -32,6 +32,14 @@ public class FileSearcherQueryMaker {
 			resultQuery.add(query, Occur.SHOULD);
 		}
 		
+		if(searchBO.getArrTitle() != null && searchBO.getArrTitle().size() > 0 ) {
+			for(String title : searchBO.getArrTitle()) {
+				Term t = new Term("filename", title);
+				Query query = new TermQuery(t);
+				resultQuery.add(query, Occur.SHOULD);
+			}
+		}
+		
 		if(searchBO.getKwd() != null && !"".equals(searchBO.getKwd())) {
 			//bq.add(kwdTokenizer("contents", searchBO.getKwd()), Occur.SHOULD);
 			Query query = new TermQuery(new Term("contents", searchBO.getKwd()));

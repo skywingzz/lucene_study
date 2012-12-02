@@ -1,9 +1,12 @@
 package com.lucene.fileSearcher;
 
+import java.util.List;
+
 public class SearchBO {
 	String title = "";
 	String kwd = "";
-	String[] arrKwd;
+	List<String> arrTitle;
+	List<String> arrKwd;
 	
 	long startDate = 0L;
 	long endDate = 0L;
@@ -32,13 +35,18 @@ public class SearchBO {
 	public void setEndDate(long endDate) {
 		this.endDate = endDate;
 	}
-	public String[] getArrKwd() {
+	public List<String> getArrTitle() {
+		return arrTitle;
+	}
+	public void setArrTitle(List<String> arrTitle) {
+		this.arrTitle = arrTitle;
+	}
+	public List<String> getArrKwd() {
 		return arrKwd;
 	}
-	public void setArrKwd(String[] arrKwd) {
+	public void setArrKwd(List<String> arrKwd) {
 		this.arrKwd = arrKwd;
 	}
-	
-	
+		
 	
 }

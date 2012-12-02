@@ -2,6 +2,8 @@ package com.lucene.fileSearcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
@@ -29,15 +31,18 @@ public class FileSearcher {
 //		searchBO.setKwd("main"); //파일 내용 검색어
 		
 		//2. 제목에 java가 있고, 내용에 main이 없는 파일 검색
-		searchBO.setTitle("java"); //파일명 검색어
+//		searchBO.setTitle("java"); //파일명 검색어
 //		searchBO.setKwd("main"); //파일 내용 검색어
 		
-		
-		
+		//
+		List<String> arrTitle = new ArrayList<String>();
+		arrTitle.add("java");
+		arrTitle.add("file");
+		searchBO.setArrTitle(arrTitle);
 		
 		//날짜 검색
-//		searchBO.setStartDate(20121126); //수정일 검색 시작일
-//		searchBO.setEndDate(20121128); //수정일 검색 종료일
+		searchBO.setStartDate(20121126); //수정일 검색 시작일
+		searchBO.setEndDate(20121228); //수정일 검색 종료일
 		
 		FileSearcherQueryMaker qm = new FileSearcherQueryMaker(searchBO);
 		Query bq = qm.makeQuery();
