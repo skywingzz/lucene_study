@@ -43,7 +43,7 @@ public class FileSearcherQueryMaker {
 		if(searchBO.getKwd() != null && !"".equals(searchBO.getKwd())) {
 			//bq.add(kwdTokenizer("contents", searchBO.getKwd()), Occur.SHOULD);
 			Query query = new TermQuery(new Term("contents", searchBO.getKwd()));
-			resultQuery.add(query, Occur.MUST_NOT);
+			resultQuery.add(query, Occur.SHOULD);
 		}
 		
 		if(searchBO.getStartDate() > 0 && searchBO.getEndDate() > 0) {

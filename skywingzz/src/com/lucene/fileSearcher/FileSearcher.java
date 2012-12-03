@@ -34,15 +34,16 @@ public class FileSearcher {
 //		searchBO.setTitle("java"); //파일명 검색어
 //		searchBO.setKwd("main"); //파일 내용 검색어
 		
-		//
+		//3. 제목에 java, file이 있고, 내용에 main이 있는 파일 검색
 		List<String> arrTitle = new ArrayList<String>();
 		arrTitle.add("java");
 		arrTitle.add("file");
 		searchBO.setArrTitle(arrTitle);
+		searchBO.setKwd("main"); //파일 내용 검색어
 		
-		//날짜 검색
-		searchBO.setStartDate(20121126); //수정일 검색 시작일
-		searchBO.setEndDate(20121228); //수정일 검색 종료일
+		//4. 파일 수정일이 20121001 ~ 20121231 사이인 파일 검색
+//		searchBO.setStartDate(20121126); //수정일 검색 시작일
+//		searchBO.setEndDate(20121228); //수정일 검색 종료일
 		
 		FileSearcherQueryMaker qm = new FileSearcherQueryMaker(searchBO);
 		Query bq = qm.makeQuery();
