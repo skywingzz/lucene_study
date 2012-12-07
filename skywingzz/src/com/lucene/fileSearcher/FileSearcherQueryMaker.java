@@ -19,11 +19,11 @@ import org.apache.lucene.search.BooleanClause.Occur;
 public class FileSearcherQueryMaker {
 	private SearchBO searchBO;
 	
-	protected FileSearcherQueryMaker(SearchBO searchBO) {
+	public FileSearcherQueryMaker(SearchBO searchBO) {
 		this.searchBO = searchBO;
 	}
 	
-	protected Query makeQuery() throws IOException {
+	public Query makeQuery() throws IOException {
 		BooleanQuery resultQuery = new BooleanQuery();
 		
 		if(searchBO.getTitle() != null && !"".equals(searchBO.getTitle())) {

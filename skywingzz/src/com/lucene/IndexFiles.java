@@ -10,10 +10,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.NumericField;
+import org.apache.lucene.document.Field.TermVector;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
@@ -30,8 +32,8 @@ import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
  */
 public class IndexFiles {
 	public static void main(String[] args) {
-//		String docsPath = "/workspace/"; //1. 색인 대상 문서가 있는 경로
-		String docsPath = "/study/lucene/index_source/";
+		String docsPath = "/workspace/"; //1. 색인 대상 문서가 있는 경로
+//		String docsPath = "/study/lucene/index_source/";
 		String indexPath = "/study/lucene/indexFiles/"; //2. 색인 파일이 만들어질 경로
 		
 		final File docDir = new File(docsPath);
@@ -46,7 +48,9 @@ public class IndexFiles {
 	    	Directory dir = FSDirectory.open(new File(indexPath));
 	        Analyzer analyzer = new KoreanAnalyzer(true); //문서 내용을 분석 할 때 사용 될 Analyzer
 //	        Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36);
-	        IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_36, analyzer);
+//	        IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_36, analyzer);
+	        IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_36, new WhitespaceAnalyzer(Version.LUCENE_33));
+	        
 
 	        boolean create = true; //4. 색인 파일을 새로 생성 할 것인지의 여부 
 	        
@@ -122,11 +126,12 @@ public class IndexFiles {
 					doc.add(nf.setLongValue(Long.parseLong(strDate)));
 					
 					//파일의 내용 색인
-					doc.add(new Field("contents", new BufferedReader(new InputStreamReader(fis, "UTF-8"))));
+					BufferedReader contents = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
+					doc.add(new Field("contents", contents.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 					
 					if(writer.getConfig().getOpenMode() == OpenMode.CREATE) {
 						System.out.println("adding New file : " + file);
-						System.out.println(doc.toString());
+//						System.out.println(doc.toString());
 						writer.addDocument(doc);
 					} else {
 						System.out.println("Updating file : " + file);
